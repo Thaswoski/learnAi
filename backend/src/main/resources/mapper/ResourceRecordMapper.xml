@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.mapper.ResourceRecordMapper">
+
+    <resultMap id="recordMap" type="com.griya.learn.entity.ResourceRecord">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="knowledgePoint" column="knowledge_point"/>
+        <result property="resourceType" column="resource_type"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `resource_record` (user_id, course_name, knowledge_point, resource_type, image_url, file_name, created_at)
+        VALUES (#{userId}, #{courseName}, #{knowledgePoint}, #{resourceType}, #{imageUrl}, #{fileName}, NOW())
+    </insert>
+
+    <select id="selectByUser" resultMap="recordMap">
+        SELECT * FROM `resource_record` WHERE user_id = #{userId} ORDER BY created_at DESC
+    </select>
+
+    <select id="countByUser" resultType="int">
+        SELECT COUNT(*) FROM `resource_record` WHERE user_id = #{userId}
+    </select>
+
+</mapper>

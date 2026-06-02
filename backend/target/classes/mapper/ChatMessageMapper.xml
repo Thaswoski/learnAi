@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.mapper.ChatMessageMapper">
+
+    <resultMap id="msgMap" type="com.griya.learn.entity.ChatMessage">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="role" column="role"/>
+        <result property="content" column="content"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="selectBySession" resultMap="msgMap">
+        SELECT * FROM `chat_message` WHERE user_id = #{userId} AND session_id = #{sessionId}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="selectSessions" resultType="string">
+        SELECT DISTINCT session_id FROM `chat_message` WHERE user_id = #{userId} ORDER BY session_id DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `chat_message` (user_id, session_id, role, content, image_url, created_at)
+        VALUES (#{userId}, #{sessionId}, #{role}, #{content}, #{imageUrl}, NOW())
+    </insert>
+
+    <delete id="deleteBySession">
+        DELETE FROM `chat_message` WHERE user_id = #{userId} AND session_id = #{sessionId}
+    </delete>
+
+</mapper>

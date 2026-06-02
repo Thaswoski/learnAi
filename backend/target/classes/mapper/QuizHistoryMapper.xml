@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.mapper.QuizHistoryMapper">
+
+    <resultMap id="historyMap" type="com.griya.learn.entity.QuizHistory">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="questionTitle" column="question_title"/>
+        <result property="userCode" column="user_code"/>
+        <result property="result" column="result"/>
+        <result property="expectedOutput" column="expected_output"/>
+        <result property="actualOutput" column="actual_output"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO quiz_history (user_id, question_id, question_title, user_code, result,
+            expected_output, actual_output, error_message, created_at)
+        VALUES (#{userId}, #{questionId}, #{questionTitle}, #{userCode}, #{result},
+            #{expectedOutput}, #{actualOutput}, #{errorMessage}, NOW())
+    </insert>
+
+    <select id="selectByUser" resultMap="historyMap">
+        SELECT * FROM quiz_history WHERE user_id = #{userId}
+        ORDER BY created_at DESC LIMIT #{limit}
+    </select>
+
+    <delete id="deleteAllByUser">
+        DELETE FROM quiz_history WHERE user_id = #{userId}
+    </delete>
+
+    <select id="correctCount" resultType="int">
+        SELECT COUNT(*) FROM quiz_history WHERE user_id = #{userId} AND result = 'correct'
+    </select>
+
+    <select id="totalCount" resultType="int">
+        SELECT COUNT(*) FROM quiz_history WHERE user_id = #{userId}
+    </select>
+
+    <select id="weeklyStats" resultType="map">
+        SELECT DATE(created_at) as week, COUNT(*) as total,
+               SUM(CASE WHEN result = 'correct' THEN 1 ELSE 0 END) as correct
+        FROM quiz_history WHERE user_id = #{userId}
+        AND created_at >= DATE_SUB(NOW(), INTERVAL #{weeks} WEEK)
+        GROUP BY DATE(created_at) ORDER BY week ASC
+    </select>
+
+    <select id="knowledgePointMastery" resultType="map">
+        SELECT kp.knowledge_point as knowledgePoint,
+               COUNT(h.id) as total,
+               SUM(CASE WHEN h.result = 'correct' THEN 1 ELSE 0 END) as correct
+        FROM c_questions kp
+        LEFT JOIN quiz_history h ON h.question_id = kp.id AND h.user_id = #{userId}
+        WHERE kp.id IN (SELECT DISTINCT question_id FROM quiz_history WHERE user_id = #{userId})
+        GROUP BY kp.knowledge_point
+        ORDER BY total DESC
+    </select>
+
+    <select id="todayCount" resultType="int">
+        SELECT COUNT(*) FROM quiz_history WHERE user_id = #{userId}
+        AND DATE(created_at) = CURDATE()
+    </select>
+
+    <select id="todayCorrectCount" resultType="int">
+        SELECT COUNT(*) FROM quiz_history WHERE user_id = #{userId}
+        AND DATE(created_at) = CURDATE() AND result = 'correct'
+    </select>
+
+    <select id="recentWeekDailyCount" resultType="map">
+        SELECT DATE(created_at) as date, COUNT(*) as total
+        FROM quiz_history WHERE user_id = #{userId}
+        AND created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        GROUP BY DATE(created_at) ORDER BY date ASC
+    </select>
+
+</mapper>

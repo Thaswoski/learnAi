@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.mapper.DashboardCacheMapper">
+
+    <resultMap id="cacheMap" type="com.griya.learn.entity.DashboardCache">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="quizTotal" column="quiz_total"/>
+        <result property="resourceTotal" column="resource_total"/>
+        <result property="dataJson" column="data_json"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectByUser" resultMap="cacheMap">
+        SELECT * FROM dashboard_cache WHERE user_id = #{userId}
+    </select>
+
+    <insert id="upsert">
+        INSERT INTO dashboard_cache (user_id, quiz_total, resource_total, data_json, updated_at)
+        VALUES (#{userId}, #{quizTotal}, #{resourceTotal}, #{dataJson}, NOW())
+        ON DUPLICATE KEY UPDATE quiz_total = #{quizTotal}, resource_total = #{resourceTotal},
+            data_json = #{dataJson}, updated_at = NOW()
+    </insert>
+
+</mapper>

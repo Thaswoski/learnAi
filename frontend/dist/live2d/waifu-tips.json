@@ -1,0 +1,45 @@
+{
+  "models": [
+    {
+      "paths": ["/live2d/model/whitecat/sdwhite cat free.model3.json"],
+      "message": "欢迎来到智学助手"
+    }
+  ],
+  "messages": [
+    "欢迎来到智学助手"
+  ],
+  "time": [
+    {"hour": "0-6", "text": "夜深了，要注意休息哦"},
+    {"hour": "6-12", "text": "早上好！今天也要努力学习呀"},
+    {"hour": "12-18", "text": "下午好~学习累了就休息一下吧"},
+    {"hour": "18-24", "text": "晚上好！一起加油吧"}
+  ],
+  "message": {
+    "default": ["有什么问题尽管问我！", "需要什么帮助吗？", "我会一直在这里陪你学习~"],
+    "welcome": "你好呀，我是智学助手的小伙伴！",
+    "touch": "唔...别乱摸啦",
+    "copy": "复制了什么呢？",
+    "console": "你也发现我了！要好好学习哦~",
+    "changeSuccess": ["换个造型试试！", "新衣服好看吗？"],
+    "changeFail": ["这件已经穿了哦", "想换别的风格吗？"],
+    "photo": "看镜头，茄子！",
+    "referrer": "欢迎从 ${site} 来到智学助手！",
+    "hitokoto": "每日一言：",
+    "hoverBody": "有什么事吗？",
+    "tapBody": "哎呀，好痒~",
+    "goodbye": "那么我们下次再见啦！",
+    "visibilitychange": "等你回来哦~"
+  },
+  "mouseover": [
+    {"selector": ".chat-messages a", "text": "要点击「${text}」这个链接吗？"},
+    {"selector": ".send-btn", "text": "发送消息嘛？"},
+    {"selector": ".quick-btn", "text": "试试这个问题！"}
+  ],
+  "click": [
+    {"selector": ".send-btn", "text": "发送！"}
+  ],
+  "seasons": [
+    {"date": "01/01", "text": "新年快乐！"},
+    {"date": "06/01", "text": "儿童节快乐~"}
+  ]
+}

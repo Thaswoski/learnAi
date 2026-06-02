@@ -1,0 +1,59 @@
+server:
+  port: 6060
+
+spring:
+  application:
+    name: learn-backend
+
+  datasource:
+    url: jdbc:mysql://47.239.181.170:3306/ai_learn?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: ai_learn
+    password: 114514
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml,classpath:mapper/community/*.xml
+  type-aliases-package: com.griya.learn.entity,com.griya.learn.community.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+app:
+  upload:
+    dir: uploads
+
+deepseek:
+  api-key: sk-3a0cd13b507e41baa5e7d4d37fccde6c
+  base-url: https://api.deepseek.com
+  model: deepseek-v4-pro
+
+qwen:
+  api-key: sk-9ae7877bc4184679829398b0a6409d44
+  base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  model: qwen3.6-flash
+
+spark:
+  app-id: 7940db2b
+  api-key: 6785c837a76d654f2dd5148957c53c78
+  api-secret: YTk0MmRiMTk4MmI4N2NmNDA3MjZjMWMw
+  host-url: wss://spark-api.xf-yun.com/x2
+  domain: spark-x
+
+xf:
+  search:
+    api-password: iskDYCaZCkeJUhBfoQtf:PpOUWSuaXMJmyKxHihpZ
+    url: https://search-api-open.cn-huabei-1.xf-yun.com/v2/search
+
+coze:
+  sat-token: sat_vxCQL58Q0JeXzjmHOAEFUM9dEMcRAIRYpO8dBQwtSbsLHrU3BTDmWCOllawVLdr4new
+  app-id: 7645930305290993679

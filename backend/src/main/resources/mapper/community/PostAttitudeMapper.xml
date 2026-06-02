@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.community.mapper.PostAttitudeMapper">
+
+    <resultMap id="attitudeMap" type="com.griya.learn.community.entity.PostAttitude">
+        <id property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="attitude" column="attitude"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectByPostAndUser" resultMap="attitudeMap">
+        SELECT * FROM `post_attitude` WHERE post_id = #{postId} AND user_id = #{userId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `post_attitude` (post_id, user_id, attitude, created_at, updated_at)
+        VALUES (#{postId}, #{userId}, #{attitude}, NOW(), NOW())
+    </insert>
+
+    <update id="updateById">
+        UPDATE `post_attitude` SET attitude = #{attitude}, updated_at = NOW() WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM `post_attitude` WHERE id = #{id}
+    </delete>
+
+</mapper>

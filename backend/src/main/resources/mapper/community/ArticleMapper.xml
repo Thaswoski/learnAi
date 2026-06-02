@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.community.mapper.ArticleMapper">
+
+    <resultMap id="articleMap" type="com.griya.learn.community.entity.Article">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="content" column="content"/>
+        <result property="coverImage" column="cover_image"/>
+        <result property="category" column="category"/>
+        <result property="authorId" column="author_id"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="status" column="status"/>
+        <result property="isTop" column="is_top"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="articleMap">
+        SELECT * FROM `article` WHERE id = #{id} AND status = 1
+    </select>
+
+    <select id="selectPage" resultMap="articleMap">
+        SELECT * FROM `article` WHERE status = 1
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+        ORDER BY is_top DESC, created_at DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM `article` WHERE status = 1
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `article` (title, summary, content, cover_image, category, author_id, view_count, like_count, status, is_top, created_at, updated_at)
+        VALUES (#{title}, #{summary}, #{content}, #{coverImage}, #{category}, #{authorId}, 0, 0, 1, #{isTop}, NOW(), NOW())
+    </insert>
+
+    <update id="updateById">
+        UPDATE `article` SET title = #{title}, summary = #{summary}, content = #{content},
+            cover_image = #{coverImage}, category = #{category}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="incrementViewCount">
+        UPDATE `article` SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="incrementLikeCount">
+        UPDATE `article` SET like_count = like_count + 1 WHERE id = #{id}
+    </update>
+
+</mapper>

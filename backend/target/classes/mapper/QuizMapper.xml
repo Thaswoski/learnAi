@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.griya.learn.mapper.QuizMapper">
+
+    <resultMap id="questionMap" type="com.griya.learn.entity.CQuestion">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="problem" column="problem"/>
+        <result property="difficulty" column="difficulty"/>
+        <result property="knowledgePoint" column="knowledge_point"/>
+        <result property="inputExample" column="input_example"/>
+        <result property="outputExample" column="output_example"/>
+        <result property="codeTemplate" column="code_template"/>
+        <result property="answerHint" column="answer_hint"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="questionMap">
+        SELECT id, title, difficulty, knowledge_point, input_example, output_example, created_at
+        FROM c_questions ORDER BY created_at DESC
+    </select>
+
+    <select id="selectById" resultMap="questionMap">
+        SELECT * FROM c_questions WHERE id = #{id}
+    </select>
+
+    <select id="selectByKnowledgePoint" resultMap="questionMap">
+        SELECT id, title, difficulty, knowledge_point, input_example, output_example, created_at
+        FROM c_questions WHERE knowledge_point = #{knowledgePoint} ORDER BY created_at DESC
+    </select>
+
+    <select id="selectByDifficulty" resultMap="questionMap">
+        SELECT id, title, difficulty, knowledge_point, input_example, output_example, created_at
+        FROM c_questions WHERE difficulty = #{difficulty} ORDER BY created_at DESC
+    </select>
+
+    <select id="selectByKeyword" resultMap="questionMap">
+        SELECT id, title, difficulty, knowledge_point, input_example, output_example, created_at
+        FROM c_questions WHERE title LIKE CONCAT('%', #{keyword}, '%') OR problem LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="selectByCondition" resultMap="questionMap">
+        SELECT id, title, difficulty, knowledge_point, input_example, output_example, created_at
+        FROM c_questions
+        <where>
+            <if test="difficulty != null and difficulty != ''">
+                AND difficulty = #{difficulty}
+            </if>
+            <if test="knowledgePoint != null and knowledgePoint != ''">
+                AND knowledge_point = #{knowledgePoint}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%') OR problem LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="selectAllKnowledgePoints" resultType="string">
+        SELECT DISTINCT knowledge_point FROM c_questions ORDER BY knowledge_point
+    </select>
+
+    <select id="selectRandom" resultMap="questionMap">
+        SELECT * FROM c_questions
+        <where>
+            <if test="difficulty != null and difficulty != ''">
+                AND difficulty = #{difficulty}
+            </if>
+        </where>
+        ORDER BY RAND() LIMIT #{limit}
+    </select>
+
+    <select id="countTotal" resultType="int">
+        SELECT COUNT(*) FROM c_questions
+    </select>
+
+    <select id="countByDifficulty" resultType="int">
+        SELECT COUNT(*) FROM c_questions WHERE difficulty = #{difficulty}
+    </select>
+
+</mapper>
